@@ -99,3 +99,55 @@ bool HugeInt::operator==( const HugeInt &right ) const
             return false ;
     return true ;
 }
+
+HugeInt HugeInt::operator*(const HugeInt &right )const
+{
+    int hold = 0 ;
+    for (int i = 0 ; i <= 29 ; i++ )
+    {
+        if (right.integer[ i ] != 0)
+        {
+            hold = i ;
+            break ;
+        }
+    }
+
+    HugeInt temp1, temp2 , temp3 ;
+    int carry = 0 ;
+    int let = 0 ;
+
+    for ( int use = 29 ; use >= hold ; use--)
+    {
+        for( int i = 29; i>= 0 ; i-- )
+        {
+            temp1.integer[i] = ( integer[i] * right.integer[ use ]) + carry;
+            if ( temp1.integer[i] > 9 )
+            {
+                carry = temp1.integer[i] / 10 ;
+                temp1.integer[i] %= 10;
+
+            }
+            else 
+                carry = 0 ;
+        }
+
+        if ( let > 0 )
+        {
+            for ( int i = 0 ; i < let ; i++ )
+            {
+                int m = 0 ;
+                while( temp1.integer[ m ] == 0)
+                    m++ ;
+                for( ; m <= 29 ; m++ )
+                    temp1.integer[ m - 1 ] = temp1.integer[ m ] ;
+                
+                temp1.integer[ m - 1 ] = 0 ;
+            }
+        }
+        let++;
+        temp2 = temp2 + temp1;
+        temp1 = temp3 ;
+
+    }
+    return temp2 ;
+}
